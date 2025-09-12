@@ -1,0 +1,12 @@
+.idea
+target
+target-retry
+src/test/resources/application.yaml
+src/test/resources/jsonInput/sessionJsonOutput.json
+/.env
+allure-report
+allure-results
+*.hsw
+*.iml
+.DS_Store
+.allure

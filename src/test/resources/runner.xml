@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="lacoste app mobile test">
+  <test name="uat test">
+    <classes>
+      <class name="com.lacoste.uat.chore.CucumberRunnerTest"/>
+    </classes>
+  </test>
+</suite>
+
+
