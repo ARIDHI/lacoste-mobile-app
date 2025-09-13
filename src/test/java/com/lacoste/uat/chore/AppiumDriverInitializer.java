@@ -43,7 +43,6 @@ public class AppiumDriverInitializer {
   @Before
   public void driverInitializer() throws MalformedURLException {
     DesiredCapabilities caps = capabilitiesManager.buildCapabilities();
-    System.out.println(caps);
     Platforms platforms = Platforms.from(envProperties.getCurrentEnv());
     driver = switch (platforms) {
       case ANDROID -> new AndroidDriver(new URL("http://127.0.0.1:4723/"), caps);

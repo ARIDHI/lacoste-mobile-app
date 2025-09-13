@@ -5,14 +5,13 @@ import org.testng.annotations.DataProvider;
 
 @CucumberOptions(plugin = {"pretty","html:target/cucumber-report/core_plugin_report.html",
   "json:target/cucumber-reports/Cucumber.json"
-  ,"rerun:target/rerun.txt",
-  "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
+  ,"rerun:target/rerun.txt"},
   features = "src/test/resources/feature",
-  glue= {"com/lacost/uat"},
+  glue= {"com.lacoste.uat", "com.lacoste.uat.steps"},
   publish = true)
 public class CucumberRunnerTest extends AbstractTestNGCucumberTests {
-  @DataProvider(parallel = true)
   @Override
+  @DataProvider(parallel = false)
   public Object[][] scenarios() {
     return super.scenarios();
   }
