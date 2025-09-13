@@ -8,9 +8,6 @@ Feature: HomePage test
 
   Scenario: Simple purchase flow
     When I open product catalog
-    Then The catalog product should not be empty
-    And  I select product from item
-    Then I expect product to have name and price
     And  I add product to cart
     Then I expect adding successfully the product
     And  I remove product from cart

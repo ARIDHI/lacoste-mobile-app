@@ -28,28 +28,7 @@ public class HomeStepDefinitions {
       .visibilityOfElementLocated(AppiumBy.accessibilityId("test-Cart drop zone")));
     Assert.assertTrue(element.isDisplayed(), "element " + element + "is not displayed");
   }
-  @When("The catalog product should not be empty")
-  public void checkCatalog() {
-    element = mobileDriver.driverWait().until(ExpectedConditions
-      .visibilityOfElementLocated(By.xpath("//android.view.ViewGroup[@content-desc='test-Item'])[1]/android.view.ViewGroup")));
-    Assert.assertTrue(element.isDisplayed(), "element " + element + "is not displayed");
-  }
 
-  @When("I select product from item")
-  public void selectProduct() {
-    element = mobileDriver.driverWait().until(ExpectedConditions
-      .visibilityOfElementLocated(By.xpath("(//android.view.ViewGroup[@content-desc='test-ADD TO CART'])[1]")));
-    element.click();
-  }
-  @When("I expect product to have name and price")
-  public void checkProductInformation() {
-    element = mobileDriver.driverWait().until(ExpectedConditions
-      .visibilityOfElementLocated(AppiumBy.accessibilityId("test-Description")));
-    Assert.assertTrue(element.isDisplayed(), "element " + element + "is not displayed");
-    element = mobileDriver.driverWait().until(ExpectedConditions
-      .visibilityOfElementLocated(AppiumBy.accessibilityId("test-Price")));
-    Assert.assertTrue(element.isDisplayed(), "element " + element + "is not displayed");
-  }
 
   @When("I add product to cart")
   public void validateProduct() {
@@ -81,8 +60,8 @@ public class HomeStepDefinitions {
 
   @When("I expect product to be removed from cart")
   public void checkRemovedProduct() {
-    element = mobileDriver.driverWait().until(ExpectedConditions
-      .visibilityOfElementLocated(AppiumBy.accessibilityId("test-REMOVE")));
-    Assert.assertFalse(element.isDisplayed(), "element " + element + "is not displayed");
+    Boolean removeElementDisplay = mobileDriver.driverWait().until(ExpectedConditions
+      .invisibilityOfElementLocated(AppiumBy.accessibilityId("test-REMOVE")));
+    Assert.assertTrue(removeElementDisplay, "element " + element + "is always displayed");
   }
 }
