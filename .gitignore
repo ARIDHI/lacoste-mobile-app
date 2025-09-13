@@ -1,7 +1,6 @@
 .idea
 target
 target-retry
-src/test/resources/application.yaml
 /.env
 *.hsw
 *.iml
