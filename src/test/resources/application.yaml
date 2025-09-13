@@ -9,7 +9,7 @@ uat:
   currentEnv: android
   envs:
    android:
-      platformName: "Android"
+      platformName: "ANDROID"
       deviceName: "emulator-5556"
       automationName: "UiAutomator2"
       platformVersion: "16.0"
