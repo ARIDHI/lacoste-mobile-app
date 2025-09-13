@@ -18,10 +18,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Setup NodeJS + Appium
+      - name: Setup Appium
         run: |
           npm install -g appium
           appium -v
+          nohup appium --port 4723 --log-level info &
+          sleep 5
           appium driver install uiautomator2
 
       - name: Run Android Emulator and Tests
