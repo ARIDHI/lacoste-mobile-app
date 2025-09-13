@@ -7,31 +7,31 @@ on:
       - main
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up JDK and Maven cache
-        uses: actions/setup-java@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          distribution: temurin   # obligatoire
-          java-version: 21
-          cache: maven
+          java-version: '21'
+          distribution: 'temurin'
 
-      - name: Start Android emulator
+      - name: Setup NodeJS + Appium
+        run: |
+          npm install -g appium
+          appium -v
+          appium driver install uiautomator2
+
+      - name: Run Android Emulator and Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
-          target: google_apis
+          api-level: 29
+          target: default
           arch: x86_64
-          force-avd-creation: true
-          emulator-options: "-no-window -no-audio"
-          emulator-boot-timeout: 500
+          profile: pixel_6
           script: |
-            echo "Emulator started"
-
-      - name: Run tests Android
-        run: mvn clean test -Duat.currentEnv=android "
+            adb devices
+            mvn clean test -Duat.currentEnv=android
