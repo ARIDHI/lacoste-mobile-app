@@ -23,7 +23,7 @@ public class CapabilitiesManager {
         caps.setCapability("appium:automationName", config.getAutomationName());
         switch (platforms) {
             case ANDROID -> {
-                caps.setCapability("appium:app", "C:\\Users\\aridh\\uat-lacoste-tests\\src\\test\\resources\\androidApp\\android.app.apk");
+                caps.setCapability("appium:app", config.getApp());
                 caps.setCapability("appium:appActivity", config.getAppActivity());
                 caps.setCapability("appium:appPackage", config.getAppPackage());
             }
