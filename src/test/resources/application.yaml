@@ -1,0 +1,27 @@
+spring:
+  codec:
+    max-in-memory-size: 30MB
+logging:
+  level:
+    webclient.http: DEBUG
+    org.springframework.http.client: DEBUG
+uat:
+  currentEnv: android
+  envs:
+   android:
+      platformName: "Android"
+      deviceName: "emulator-5556"
+      automationName: "UiAutomator2"
+      platformVersion: "16.0"
+      appPackage:  "com.swaglabsmobileapp"
+      appActivity: "com.swaglabsmobileapp.SplashActivity"
+      app: "${project.basedir}/src/test/resources/androidApp/android.app.apk"
+   iso:
+      platformName: "iOS"
+      deviceName: "iPhone 16"
+      automationName: "XCUITest"
+      appPackage: "com.swaglabsmobileapp"
+      appActivity: "com.swaglabsmobileapp.SplashActivity"
+      app: "${project.basedir}/src/test/resources/iosApp/ios.app.ipa"
+
+
