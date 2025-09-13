@@ -29,7 +29,7 @@ jobs:
           arch: x86_64
           force-avd-creation: true
           emulator-options: "-no-window -no-audio"
-          timeout: 600
+          emulator-boot-timeout: 500
           script: |
             echo "Emulator started"
 
