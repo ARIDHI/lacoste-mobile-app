@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master'
+      - master
 
 jobs:
   build:
@@ -29,9 +29,11 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
+          emulator-port: 5556
           target: default
           arch: x86_64
           profile: pixel_6
           script: |
             adb devices
-            mvn clean test -Duat.currentEnv=android
+            mvn clean test -Dspring.config.location=src/test/resources/application.yml -Duat.currentEnv=android
+
