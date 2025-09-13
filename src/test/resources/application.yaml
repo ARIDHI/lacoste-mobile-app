@@ -15,13 +15,13 @@ uat:
       platformVersion: "16.0"
       appPackage:  "com.swaglabsmobileapp"
       appActivity: "com.swaglabsmobileapp.SplashActivity"
-      app: "src/test/resources/androidApp/android.app.apk"
+      app: "${user.dir}/src/test/resources/androidApp/android.app.apk"
    iso:
       platformName: "iOS"
       deviceName: "iPhone 16"
       automationName: "XCUITest"
       appPackage: "com.swaglabsmobileapp"
       appActivity: "com.swaglabsmobileapp.SplashActivity"
-      app: "src/test/resources/iosApp/ios.app.ipa"
+      app: "${user.dir}/src/test/resources/iosApp/ios.app.ipa"
 
 
