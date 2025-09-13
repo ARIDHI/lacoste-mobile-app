@@ -45,8 +45,8 @@ public class AppiumDriverInitializer {
     DesiredCapabilities caps = capabilitiesManager.buildCapabilities();
     Platforms platforms = Platforms.from(envProperties.getCurrentEnv());
     driver = switch (platforms) {
-      case ANDROID -> new AndroidDriver(new URL("http://127.0.0.1:4723/"), caps);
-      case IOS -> new IOSDriver(new URL("http://127.0.0.1:4723/"), caps);
+      case ANDROID -> new AndroidDriver(new URL("http://localhost:4723/"), caps);
+      case IOS -> new IOSDriver(new URL("http://localhost:4723/"), caps);
     };
 
     log.info("Driver initialized for platform: {}", platforms);
