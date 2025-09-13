@@ -8,6 +8,5 @@ import org.springframework.test.context.TestPropertySource;
 
 @CucumberContextConfiguration
 @SpringBootTest(classes = UspE2EApplication.class, webEnvironment = WebEnvironment.NONE)
-@TestPropertySource("classpath:application.yaml")
 public class CucumberSpringConfiguration {
 }
