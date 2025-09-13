@@ -33,7 +33,7 @@ jobs:
           emulator-port: 5556
           target: default
           arch: x86_64
-          profile: pixel_9
+          profile: pixel_6
           script: |
             adb devices
             mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
