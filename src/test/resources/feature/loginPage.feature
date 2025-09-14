@@ -1,4 +1,4 @@
-@login
+@lOGINPAGE
 Feature: Login tests
 
   Background:
