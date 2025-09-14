@@ -33,10 +33,10 @@ jobs:
           appium driver install uiautomator2
           # Capabilities par défaut avec timeouts augmentés
           echo '{
-            "adbExecTimeout": 120000,
-            "uiautomator2ServerInstallTimeout": 120000,
-            "uiautomator2ServerLaunchTimeout": 120000,
-            "appInstallTimeout": 120000}' > default-capabilities.json
+            "appium:adbExecTimeout": 120000,
+            "appium:uiautomator2ServerInstallTimeout": 120000,
+            "appium:uiautomator2ServerLaunchTimeout": 120000,
+            "appium:appInstallTimeout": 120000}' > default-capabilities.json
           # Lancer Appium en arrière-plan
           nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
