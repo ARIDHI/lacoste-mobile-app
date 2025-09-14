@@ -2,6 +2,12 @@ name: Android Tests
 
 on:
   workflow_dispatch:
+      inputs:
+        tag:
+          description: 'Enter Cucumber tag to run'
+          required: true
+          default: ""
+          type: string
   push:
     branches:
       - master
@@ -9,6 +15,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CUCUMBER_TAG: ${{ github.event.inputs.tag }}
 
     steps:
       - name: Checkout code
@@ -29,23 +37,15 @@ jobs:
         run: |
           npm install -g appium
           appium -v
-          # Installer le driver Android
           appium driver install uiautomator2
-          # Capabilities par défaut avec timeouts augmentés
           echo '{
             "appium:adbExecTimeout": 120000,
             "appium:uiautomator2ServerInstallTimeout": 120000,
             "appium:uiautomator2ServerLaunchTimeout": 120000,
             "appium:appInstallTimeout": 120000}' > default-capabilities.json
-          # Lancer Appium en arrière-plan
           nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
           appium driver list --installed
-
-      - name: List all files recursively
-        run: |
-          echo "Listing all files in the project:"
-          ls -R
 
       - name: Run Android Emulator and Tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -63,7 +63,10 @@ jobs:
             echo "Emulator is fully booted!"
             adb shell input keyevent 82
             cat appium.log | tail -n 50
-            mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
+            mvn clean test \
+            -Dspring.config.location=src/test/resources/application.yaml \
+            -Duat.currentEnv=android \
+            -Dcucumber.filter.tags="${CUCUMBER_TAG}"
 
       - name: Upload Appium Logs
         if: failure()
