@@ -6,7 +6,7 @@ on:
       tags:
         description: 'Enter Cucumber tag(s) to run'
         required: true
-        default: "@ios"
+        default: "@UAT"
         type: string
 
 jobs:

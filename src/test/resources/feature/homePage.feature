@@ -12,4 +12,4 @@ Feature: HomePage test
     And  I add product to cart
     Then I expect adding successfully the product
     And  I remove product from cart
-
+    Then I expect product to be removed from cart
