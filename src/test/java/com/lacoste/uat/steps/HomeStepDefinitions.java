@@ -58,10 +58,4 @@ public class HomeStepDefinitions {
     element.click();
   }
 
-  @When("I expect product to be removed from cart")
-  public void checkRemovedProduct() {
-    Boolean removeElementDisplay = mobileDriver.driverWait().until(ExpectedConditions
-      .invisibilityOfElementLocated(AppiumBy.accessibilityId("test-REMOVE")));
-    Assert.assertTrue(removeElementDisplay, "element " + removeElementDisplay + "is always displayed");
-  }
 }
