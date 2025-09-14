@@ -1,4 +1,4 @@
-name: Android Appium Tests
+name: ios Tests
 
 on:
   workflow_dispatch:

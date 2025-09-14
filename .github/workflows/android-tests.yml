@@ -26,9 +26,9 @@ jobs:
           sleep 5
           appium driver install uiautomator2
      - name: List all files recursively
-            run: |
-              echo "Listing all files in the project:"
-              ls -R
+        run: |
+          echo "Listing all files in the project:"
+          ls -R
       - name: Run Android Emulator and Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:

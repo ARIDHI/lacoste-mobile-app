@@ -31,7 +31,6 @@ public class CapabilitiesManager {
                 caps.setCapability("app", config.getApp());
                 caps.setCapability("bundleId", config.getBundleId());
             }
-            default -> throw new IllegalArgumentException("Unsupported platform: " + config.getPlatformName());
         }
         log.info("build platform capabilities : {}", caps);
         return caps;

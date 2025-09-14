@@ -62,6 +62,6 @@ public class HomeStepDefinitions {
   public void checkRemovedProduct() {
     Boolean removeElementDisplay = mobileDriver.driverWait().until(ExpectedConditions
       .invisibilityOfElementLocated(AppiumBy.accessibilityId("test-REMOVE")));
-    Assert.assertTrue(removeElementDisplay, "element " + element + "is always displayed");
+    Assert.assertTrue(removeElementDisplay, "element " + removeElementDisplay + "is always displayed");
   }
 }
