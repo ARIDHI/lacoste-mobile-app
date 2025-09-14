@@ -1,19 +1,19 @@
-name: Android UI Tests
+name: Android Tests
 
 on:
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Enter Cucumber tag to run '
+      tags:
+        description: 'Enter Cucumber tag(s) to run'
         required: true
-        default: ""
+        default: "@android"
         type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CUCUMBER_TAG: ${{ github.event.inputs.tag }}
+      TAGS: ${{ github.event.inputs.tags }}
 
     steps:
       - name: Checkout code
@@ -33,21 +33,15 @@ jobs:
           npm install -g appium@next
           appium -v
           appium driver install uiautomator2
-          # Définir les timeouts avec le préfixe appium:
+          # Timeouts Appium
           echo '{
             "appium:adbExecTimeout": 120000,
             "appium:uiautomator2ServerInstallTimeout": 120000,
             "appium:uiautomator2ServerLaunchTimeout": 120000,
-            "appium:appInstallTimeout": 120000
-          }' > default-capabilities.json
+            "appium:appInstallTimeout": 120000}' > default-capabilities.json
           nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
           appium driver list --installed
-
-      - name: List all files recursively
-        run: |
-          echo "Listing all files in the project:"
-          ls -R
 
       - name: Run Android Emulator and Tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -65,12 +59,10 @@ jobs:
             echo "Emulator is fully booted!"
             adb shell input keyevent 82
             cat appium.log | tail -n 50
-            TAG="${CUCUMBER_TAG//\"/}"
-            echo "Running Cucumber with tag: $TAG"
             mvn clean test \
               -Dspring.config.location=src/test/resources/application.yaml \
               -Duat.currentEnv=android \
-              -Dcucumber.filter.tags="$TAG"
+              -Dcucumber.filter.tags="${TAGS}"
 
       - name: Upload Appium Logs
         if: failure()
