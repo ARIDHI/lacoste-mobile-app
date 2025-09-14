@@ -24,18 +24,19 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # Appium + Driver UiAutomator2
+      # Appium + UiAutomator2 + default capabilities
       - name: Setup Appium
         run: |
           npm install -g appium
           appium -v
           # Installer le driver Android
           appium driver install uiautomator2
-          # Vérifier que le driver est bien installé
-          appium driver list --installed
-          # Lancer Appium en background
-          nohup appium --port 4723 --log-level info > appium.log 2>&1 &
+          # Capabilities par défaut pour augmenter adbExecTimeout
+          echo '{"adbExecTimeout": 60000}' > default-capabilities.json
+          # Lancer Appium avec ces capabilities
+          nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
+          appium driver list --installed
 
       - name: List all files recursively
         run: |
@@ -52,5 +53,7 @@ jobs:
           profile: pixel_6
           script: |
             adb devices
+            adb wait-for-device
+            adb shell getprop sys.boot_completed
             cat appium.log | tail -n 50
             mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android

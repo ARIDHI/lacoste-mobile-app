@@ -26,6 +26,8 @@ public class CapabilitiesManager {
                 caps.setCapability("appium:app", config.getApp());
                 caps.setCapability("appium:appActivity", config.getAppActivity());
                 caps.setCapability("appium:appPackage", config.getAppPackage());
+                caps.setCapability("appium:adbExecTimeout", 60000);
+
             }
             case IOS -> {
                 caps.setCapability("app", config.getApp());
