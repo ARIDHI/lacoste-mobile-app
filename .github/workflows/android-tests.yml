@@ -31,9 +31,13 @@ jobs:
           appium -v
           # Installer le driver Android
           appium driver install uiautomator2
-          # Capabilities par défaut pour augmenter adbExecTimeout
-          echo '{"adbExecTimeout": 60000}' > default-capabilities.json
-          # Lancer Appium avec ces capabilities
+          # Capabilities par défaut avec timeouts augmentés
+          echo '{
+            "adbExecTimeout": 120000,
+            "uiautomator2ServerInstallTimeout": 120000,
+            "uiautomator2ServerLaunchTimeout": 120000,
+            "appInstallTimeout": 120000}' > default-capabilities.json
+          # Lancer Appium en arrière-plan
           nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
           appium driver list --installed
@@ -52,10 +56,18 @@ jobs:
           arch: x86_64
           profile: pixel_6
           script: |
-             adb devices
-             adb wait-for-device
-             until adb shell getprop sys.boot_completed | grep -m 1 '1'; do sleep 5; done
-             until adb shell pm list packages; do sleep 5; done
-             echo "Emulator is fully booted!"
-             cat appium.log | tail -n 50
-             mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
+            adb devices
+            adb wait-for-device
+            until adb shell getprop sys.boot_completed | grep -m 1 '1'; do sleep 5; done
+            until adb shell pm list packages; do sleep 5; done
+            echo "Emulator is fully booted!"
+            adb shell input keyevent 82
+            cat appium.log | tail -n 50
+            mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
+
+      - name: Upload Appium Logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-logs
+          path: appium.log
