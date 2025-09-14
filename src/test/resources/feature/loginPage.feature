@@ -1,4 +1,4 @@
-@lOGINPAGE
+@lOGINPAGE @UAT
 Feature: Login tests
 
   Background:

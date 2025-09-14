@@ -6,8 +6,11 @@ on:
       tags:
         description: 'Enter Cucumber tag(s) to run'
         required: true
-        default: "@android"
+        default: "@UAT"
         type: string
+  push:
+    branches:
+     - master
 
 jobs:
   build:
@@ -59,10 +62,8 @@ jobs:
             echo "Emulator is fully booted!"
             adb shell input keyevent 82
             cat appium.log | tail -n 50
-            mvn clean test \
-              -Dspring.config.location=src/test/resources/application.yaml \
-              -Duat.currentEnv=android \
-              -Dcucumber.filter.tags="${TAGS}"
+            TAGS=$(echo "${TAGS}" | tr -d '"')
+            mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android -Dcucumber.filter.tags="TAGS"
 
       - name: Upload Appium Logs
         if: failure()
