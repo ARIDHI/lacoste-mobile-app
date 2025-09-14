@@ -5,9 +5,11 @@ on:
   push:
     branches:
       - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,6 +20,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      # Installe Android SDK et accepte les licences
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Setup Appium
         run: |
           npm install -g appium
@@ -25,10 +31,12 @@ jobs:
           nohup appium --port 4723 --log-level info &
           sleep 5
           appium driver install uiautomator2
-     - name: List all files recursively
+
+      - name: List all files recursively
         run: |
           echo "Listing all files in the project:"
           ls -R
+
       - name: Run Android Emulator and Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -40,4 +48,3 @@ jobs:
           script: |
             adb devices
             mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
-
