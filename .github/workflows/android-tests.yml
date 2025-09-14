@@ -20,17 +20,22 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Installe Android SDK et accepte les licences
+      # Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      # Appium + Driver UiAutomator2
       - name: Setup Appium
         run: |
           npm install -g appium
           appium -v
-          nohup appium --port 4723 --log-level info &
-          sleep 5
+          # Installer le driver Android
           appium driver install uiautomator2
+          # Vérifier que le driver est bien installé
+          appium driver list --installed
+          # Lancer Appium en background
+          nohup appium --port 4723 --log-level info > appium.log 2>&1 &
+          sleep 5
 
       - name: List all files recursively
         run: |
@@ -47,4 +52,5 @@ jobs:
           profile: pixel_6
           script: |
             adb devices
+            cat appium.log | tail -n 50
             mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
