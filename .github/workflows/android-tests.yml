@@ -52,8 +52,10 @@ jobs:
           arch: x86_64
           profile: pixel_6
           script: |
-            adb devices
-            adb wait-for-device
-            adb shell getprop sys.boot_completed
-            cat appium.log | tail -n 50
-            mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
+             adb devices
+             adb wait-for-device
+             until adb shell getprop sys.boot_completed | grep -m 1 '1'; do sleep 5; done
+             until adb shell pm list packages; do sleep 5; done
+             echo "Emulator is fully booted!"
+             cat appium.log | tail -n 50
+             mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android
