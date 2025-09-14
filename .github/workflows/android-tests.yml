@@ -1,16 +1,13 @@
-name: Android Tests
+name: Android UI Tests
 
 on:
   workflow_dispatch:
-      inputs:
-        tag:
-          description: 'Enter Cucumber tag to run'
-          required: true
-          default: ""
-          type: string
-  push:
-    branches:
-      - master
+    inputs:
+      tag:
+        description: 'Enter Cucumber tag to run '
+        required: true
+        default: ""
+        type: string
 
 jobs:
   build:
@@ -28,24 +25,29 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # Appium + UiAutomator2 + default capabilities
       - name: Setup Appium
         run: |
-          npm install -g appium
+          npm install -g appium@next
           appium -v
           appium driver install uiautomator2
+          # Définir les timeouts avec le préfixe appium:
           echo '{
             "appium:adbExecTimeout": 120000,
             "appium:uiautomator2ServerInstallTimeout": 120000,
             "appium:uiautomator2ServerLaunchTimeout": 120000,
-            "appium:appInstallTimeout": 120000}' > default-capabilities.json
+            "appium:appInstallTimeout": 120000
+          }' > default-capabilities.json
           nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
           appium driver list --installed
+
+      - name: List all files recursively
+        run: |
+          echo "Listing all files in the project:"
+          ls -R
 
       - name: Run Android Emulator and Tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -63,10 +65,12 @@ jobs:
             echo "Emulator is fully booted!"
             adb shell input keyevent 82
             cat appium.log | tail -n 50
+            TAG="${CUCUMBER_TAG//\"/}"
+            echo "Running Cucumber with tag: $TAG"
             mvn clean test \
-            -Dspring.config.location=src/test/resources/application.yaml \
-            -Duat.currentEnv=android \
-            -Dcucumber.filter.tags="${CUCUMBER_TAG}"
+              -Dspring.config.location=src/test/resources/application.yaml \
+              -Duat.currentEnv=android \
+              -Dcucumber.filter.tags="$TAG"
 
       - name: Upload Appium Logs
         if: failure()
