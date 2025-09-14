@@ -63,7 +63,7 @@ jobs:
             adb shell input keyevent 82
             cat appium.log | tail -n 50
             TAGS=$(echo "${TAGS}" | tr -d '"')
-            mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android -Dcucumber.filter.tags="$TAGS"
+            mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Duat.currentEnv=android -Dcucumber.filter.tags="${TAGS}"
 
       - name: Upload Appium Logs
         if: failure()
