@@ -39,7 +39,7 @@
 * install Appium using npm command : npm install -g appium@next --> commande to start appium : appium  , commande to locate appium path : where appium , commande to uninstall appium : npm uninstall -g appium
 
 2- install uiAutomator2:
-*check appium driver -->  with command : appium driver -h   or appium driver list
+* check appium driver -->  with command : appium driver -h   or appium driver list
 * install drivers exp :   uiAutomator2 : appium driver install uiautomator2
 
 3- install appium inspector:
@@ -59,39 +59,50 @@
 
 ## For Android application:
 1- Run appium server with command appium , wait until appium run correctly and check url server 
+
 2- Run appium inspector
 * Use appium server and port 
 * Use capabilities exp:
   - "appium:automationName": "uiautomator2",
   - "appium:platformName": "Android",
   - "appium:app": "C:\\Users\\aridh\\uat-lacoste-tests\\src\\test\\resources\\androidApp\\android.app.apk",
+  
 3- Run android studiod and create a virtual device 
+
 4- Get device name with this command : adb devices
+
 5- Start session to inspect element
-  - 
+  
 ## For iOS application
 1- Install Xcode
 * Configure Apple ID in Account preferences
 * Install from App Store
+
 2- Install Xcode command line tools
 * Command: xcode-select --install
+
 3- Install xcpretty [to make Xcode output reasonable]
 * Command to install xcpretty: gem install xcpretty
+
 4- Install Carthage [dependency manager, required for WebDriverAgent]
-*Command to install Carthage: brew install Carthage
+* Command to install Carthage: brew install 
+
 5- Install Appium-doctor and check Appium setup
 * Command to install Appium doctor: npm install -g appium-doctor
 * Command to get help: appium-doctor --h
 * Command to check setup for iOS: appium-doctor --ios
+
 6-Install XCUITest driver (using Appium CLI)
 * Command to get help: appium driver --help (or -h)
 * Command to list drivers: appium driver list
 * Command to install driver: appium driver install XCUITest
+
 7- Simulator setup: Build UIKitCatalog app for simulator
 * Download link: https://github.com/appium/ios-uicatalog
 * Command to get simulator name: xcodebuild -showsdks
 * Command to build app for the simulator: xcodebuild -sdk <simulator_name>
 * Command to build UIKitCatalog app for simulator: npm install
+
 8- Simulator setup: Start session with UIKitCatalog app using Appium CLI
 * Command to get UDID: xcrun simctl list
 * Command to get UDID: xcrun xctrace list devices
