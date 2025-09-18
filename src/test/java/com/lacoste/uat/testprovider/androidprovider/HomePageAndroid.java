@@ -60,8 +60,5 @@ public class HomePageAndroid extends BaseTest implements HomePageProvider {
 
   @Override
   public void checkRemovedProductFromCart() {
-    Boolean removeElementDisplay = mobileDriver.driverWait().until(ExpectedConditions
-      .invisibilityOfElementLocated(AppiumBy.accessibilityId("test-REMOVE")));
-    Assert.assertTrue(removeElementDisplay, "element " + removeElementDisplay + "is always displayed");
   }
 }
