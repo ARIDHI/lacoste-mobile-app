@@ -1,5 +1,6 @@
 package com.lacoste.uat.conf;
 
+
 import com.lacoste.uat.data.CapsPrifix;
 import com.lacoste.uat.data.Platforms;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class CapabilitiesManager {
 
             }
             case IOS -> {
-                caps.setCapability("app", config.getApp());
-                caps.setCapability("bundleId", config.getBundleId());
+                caps.setCapability("appium:app", config.getApp());
+                caps.setCapability("appium:bundleId", config.getBundleId());
             }
         }
         log.info("build platform capabilities : {}", caps);
