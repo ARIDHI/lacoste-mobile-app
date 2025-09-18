@@ -1,6 +1,8 @@
-package com.lacoste.uat.testprovider;
+package com.lacoste.uat.testprovider.androidprovider;
 
 import com.lacoste.uat.chore.AppiumDriverInitializer;
+import com.lacoste.uat.testprovider.defaultprovider.BaseTest;
+import com.lacoste.uat.testprovider.defaultprovider.HomePageProvider;
 import io.appium.java_client.AppiumBy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,7 +16,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Profile("android")
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class HomePageAndroid extends BaseTest implements HomePageProvider{
+public class HomePageAndroid extends BaseTest implements HomePageProvider {
 
   WebElement element;
   public HomePageAndroid(AppiumDriverInitializer mobileDriver) {

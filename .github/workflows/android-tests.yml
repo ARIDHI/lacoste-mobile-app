@@ -8,9 +8,8 @@ on:
         required: true
         default: "@UAT"
         type: string
-  push:
-    branches:
-     - master
+  repository_dispatch:
+    types: [trigger-tests]
 
 jobs:
   build:

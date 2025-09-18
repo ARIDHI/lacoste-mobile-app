@@ -1,4 +1,4 @@
-package com.lacoste.uat.testprovider;
+package com.lacoste.uat.testprovider.defaultprovider;
 
 import org.springframework.stereotype.Service;
 

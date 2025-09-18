@@ -1,43 +1,47 @@
-package com.lacoste.uat.testprovider;
+package com.lacoste.uat.testprovider.iosprovider;
 
 import com.lacoste.uat.chore.AppiumDriverInitializer;
+import com.lacoste.uat.testprovider.defaultprovider.BaseTest;
+import com.lacoste.uat.testprovider.defaultprovider.HomePageProvider;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.testng.Assert.assertTrue;
 
-
-@Slf4j
-@Component
 @Profile("ios")
+@Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class LoginPageIOS extends BaseTest implements LoginPageProvider{
-  WebElement element;
-  public LoginPageIOS(AppiumDriverInitializer mobileDriver) {
+@Slf4j
+public class HomePageIOS extends BaseTest implements HomePageProvider {
+
+  public HomePageIOS(AppiumDriverInitializer mobileDriver) {
     super(mobileDriver);
   }
 
   @Override
-  public void logInPagecheck() {
+  public void openCatalogAndCheckProduct() {
     log.warn("My simulator doesn't work properly on my VMware machine because my computer is too slow.");
   }
 
   @Override
-  public void logInWithMultiCredentials(String credentials) {
+  public void validateSelectedProduct() {
     log.warn("My simulator doesn't work properly on my VMware machine because my computer is too slow.");
   }
 
   @Override
-  public void iCheckloginResult(String expectedResult) {
+  public void validateAddCartOperation() {
     log.warn("My simulator doesn't work properly on my VMware machine because my computer is too slow.");
   }
 
   @Override
-  public void logOutCheck() {
+  public void removeProductFromCart() {
+    log.warn("My simulator doesn't work properly on my VMware machine because my computer is too slow.");
+  }
+
+  @Override
+  public void checkRemovedProductFromCart() {
     log.warn("My simulator doesn't work properly on my VMware machine because my computer is too slow.");
   }
 }

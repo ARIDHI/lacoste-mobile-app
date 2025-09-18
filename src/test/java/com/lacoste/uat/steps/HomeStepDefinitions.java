@@ -1,7 +1,7 @@
 package com.lacoste.uat.steps;
 
 import com.lacoste.uat.chore.AppiumDriverInitializer;
-import com.lacoste.uat.testprovider.HomePageProvider;
+import com.lacoste.uat.testprovider.defaultprovider.HomePageProvider;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
 

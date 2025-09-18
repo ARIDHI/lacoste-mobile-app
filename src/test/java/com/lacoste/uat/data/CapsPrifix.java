@@ -15,4 +15,6 @@ public class CapsPrifix {
     private String wdaLocalPort;
     private String webkitDebugProxyPort;
     private String bundleId;
+    private String activeProfile;
+
 }

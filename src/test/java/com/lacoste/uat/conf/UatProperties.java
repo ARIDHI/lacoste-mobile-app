@@ -14,8 +14,9 @@ public class UatProperties {
 
   private String currentEnv;
   private Map<String, CapsPrifix> envs;
+  private String activeProfile;
 
-  public CapsPrifix environment() {
+  public CapsPrifix environment()    {
     return envs.get(currentEnv.toLowerCase());
   }
 }

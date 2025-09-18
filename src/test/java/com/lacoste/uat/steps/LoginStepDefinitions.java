@@ -1,6 +1,6 @@
 package com.lacoste.uat.steps;
 
-import com.lacoste.uat.testprovider.LoginPageProvider;
+import com.lacoste.uat.testprovider.defaultprovider.LoginPageProvider;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

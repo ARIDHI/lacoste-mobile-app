@@ -1,4 +1,4 @@
-package com.lacoste.uat.testprovider;
+package com.lacoste.uat.testprovider.defaultprovider;
 
 import com.lacoste.uat.chore.AppiumDriverInitializer;
 import org.openqa.selenium.WebElement;

@@ -1,6 +1,8 @@
-package com.lacoste.uat.testprovider;
+package com.lacoste.uat.testprovider.androidprovider;
 
 import com.lacoste.uat.chore.AppiumDriverInitializer;
+import com.lacoste.uat.testprovider.defaultprovider.BaseTest;
+import com.lacoste.uat.testprovider.defaultprovider.LoginPageProvider;
 import io.appium.java_client.AppiumBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -17,7 +19,7 @@ import static org.testng.Assert.assertTrue;
 @Profile("android")
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class LoginPageAndroid extends BaseTest implements LoginPageProvider{
+public class LoginPageAndroid extends BaseTest implements LoginPageProvider {
   WebElement element;
   public LoginPageAndroid(AppiumDriverInitializer mobileDriver) {
     super(mobileDriver);
