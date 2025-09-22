@@ -33,6 +33,7 @@ public class CapabilitiesManager {
             case IOS -> {
                 caps.setCapability("appium:app", config.getApp());
                 caps.setCapability("appium:bundleId", config.getBundleId());
+                caps.setCapability("appium:udid", config.getUdid());
             }
         }
         log.info("build platform capabilities : {}", caps);

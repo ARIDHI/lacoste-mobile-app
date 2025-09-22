@@ -16,5 +16,6 @@ public class CapsPrifix {
     private String webkitDebugProxyPort;
     private String bundleId;
     private String activeProfile;
+    private String udid;
 
 }
