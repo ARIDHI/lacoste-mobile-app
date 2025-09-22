@@ -1,4 +1,4 @@
-name: iOS UI Tests
+name: iOS Tests
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-ios:
-    runs-on: macos-latest
+    runs-on: macos-14   # macOS 14 = Xcode 15.x
     env:
       TAGS: ${{ github.event.inputs.tags }}
 
@@ -26,38 +26,53 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Xcode
-        run: |
-          sudo xcode-select -s /Applications/Xcode_15.app
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.2'
+      - run: |
           xcodebuild -version
           gem install cocoapods
-          pod install --project-directory=ios
 
       - name: Setup Appium
         run: |
           npm install -g appium@next
           appium -v
           appium driver install xcuitest
-          # Timeouts Appium
           echo '{
             "appium:adbExecTimeout": 120000,
             "appium:uiautomator2ServerInstallTimeout": 120000,
             "appium:uiautomator2ServerLaunchTimeout": 120000,
-            "appium:appInstallTimeout": 120000}' > default-capabilities.json
+            "appium:appInstallTimeout": 120000
+          }' > default-capabilities.json
           nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
           appium driver list --installed
 
-      - name: Run iOS Simulator and Tests
+      - name: Boot iOS Simulator
         run: |
-          xcrun simctl list devices
-          xcrun simctl boot "iPhone 14"
-          xcrun simctl status_bar "iPhone 14" override --batteryState charged --batteryLevel 100
-          echo "Simulator booted!"
+          # Cherche un UDID pour iPhone 15 Pro
+          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (" | head -n 1 | awk -F '[()]' '{print $2}')
+          # Fallback si iPhone 15 Pro non dispo
+          if [ -z "$UDID" ]; then
+            echo "iPhone 15 Pro non trouvé, fallback vers iPhone 14..."
+            UDID=$(xcrun simctl list devices available | grep "iPhone 14 (" | head -n 1 | awk -F '[()]' '{print $2}')
+          fi
+          if [ -z "$UDID" ]; then
+            echo "No simulator iPhone 15 Pro ou iPhone 14 trouvé"
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Selected UDID: $UDID"
+          xcrun simctl boot $UDID
+          xcrun simctl status_bar $UDID override --batteryState charged --batteryLevel 100
+          open -a Simulator --args -CurrentDeviceUDID $UDID
+          sleep 10
+
+      - name: Run iOS Tests
+        run: |
           cat appium.log | tail -n 50
-          mvn clean test \
-            -Dspring.config.location=src/test/resources/application.yaml \
-            -Duat.currentEnv=ios \
-            -Dcucumber.filter.tags="${TAGS}"
+          mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Dappium.deviceName="iPhone 15 Pro" -Dappium.udid="$SIM_UDID" \
+            -Dappium.platformVersion="17.5" -Dappium.app="$APP_PATH" -Dappium.automationName="XCUITest" -Duat.currentEnv=ios -Dcucumber.filter.tags="${TAGS}"
 
       - name: Upload Appium Logs
         if: failure()
