@@ -10,55 +10,80 @@ on:
         type: string
 
 jobs:
-  test-ios:
-    runs-on: macos-latest
-
+  build-ios:
+    runs-on: macos-14   # macOS 14 = Xcode 15.x
     env:
-     APP_PATH: /Users/runner/work/lacoste-mobile-app/lacoste-mobile-app/src/test/resources/iosApp/ios.app
+      TAGS: ${{ github.event.inputs.tags }}
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: temurin
-        java-version: 21
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-    - name: List available iOS simulators
-      id: list-sim
-      run: |
-        echo "Available simulators:"
-        xcrun simctl list devices available
-        UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (" | grep "iOS 17.5" | head -n 1 | awk -F '[()]' '{print $2}')
-        if [ -z "$UDID" ]; then
-          echo "No valid simulator found!"
-          exit 1
-        fi
-        echo "SIM_UDID=$UDID" >> $GITHUB_ENV
-        echo "Using simulator UDID: $UDID"
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.2'
+      - run: |
+          xcodebuild -version
+          gem install cocoapods
 
-    - name: Boot simulator
-      run: |
-        xcrun simctl boot "$SIM_UDID" || echo "Simulator already booted"
-        open -a Simulator
+      - name: Setup Appium
+        run: |
+          npm install -g appium@next
+          appium -v
+          appium driver install xcuitest
+          echo '{
+            "appium:adbExecTimeout": 120000,
+            "appium:uiautomator2ServerInstallTimeout": 120000,
+            "appium:uiautomator2ServerLaunchTimeout": 120000,
+            "appium:appInstallTimeout": 120000
+          }' > default-capabilities.json
+          nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
+          sleep 5
+          appium driver list --installed
 
-    - name: Start Appium
-      run: |
-        npm install -g appium
-        appium --log-level info &
+      - name: Boot iOS Simulator
+        run: |
+          # Cherche un UDID pour iPhone 15 Pro
+          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (" | head -n 1 | awk -F '[()]' '{print $2}')
+          # Fallback si iPhone 15 Pro non dispo
+          if [ -z "$UDID" ]; then
+            echo "iPhone 15 Pro non trouvé, fallback vers iPhone 14..."
+            UDID=$(xcrun simctl list devices available | grep "iPhone 14 (" | head -n 1 | awk -F '[()]' '{print $2}')
+          fi
+          if [ -z "$UDID" ]; then
+            echo "No simulator iPhone 15 Pro ou iPhone 14 trouvé"
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Selected UDID: $UDID"
+          xcrun simctl boot $UDID
+          xcrun simctl status_bar $UDID override --batteryState charged --batteryLevel 100
+          open -a Simulator --args -CurrentDeviceUDID $UDID
+          sleep 10
 
-    - name: Run Maven tests
-      run: |
-        mvn clean test \
-          -Dappium.deviceName="iPhone 15 Pro" \
-          -Dappium.udid="$SIM_UDID" \
-          -Dappium.platformVersion="17.5" \
-          -Dappium.app="$APP_PATH" \
-          -Dappium.automationName="XCUITest"
+      - name: Run iOS Tests
+        run: |
+          cat appium.log | tail -n 50
+          mvn clean test \
+            -Dspring.config.location=src/test/resources/application.yaml \
+            -Dappium.deviceName="iPhone 15 Pro" \
+            -Dappium.udid="$SIM_UDID" \
+            -Dappium.platformVersion="17.5" \
+            -Dappium.app="$APP_PATH" \
+            -Dappium.automationName="XCUITest"
+            -Duat.currentEnv=ios \
+            -Dcucumber.filter.tags="${TAGS}"
 
-    - name: Shutdown simulator
-      if: always()
-      run: |
-        xcrun simctl shutdown "$SIM_UDID"
+      - name: Upload Appium Logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-logs-ios
+          path: appium.log
