@@ -1,4 +1,4 @@
-name: iOS UI Tests
+name: iOS Tests
 
 on:
   workflow_dispatch:
