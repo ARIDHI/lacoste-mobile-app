@@ -1,8 +1,6 @@
 spring:
   profiles:
     active: android
-  codec:
-    max-in-memory-size: 30MB
 logging:
   level:
     webclient.http: DEBUG
@@ -22,7 +20,6 @@ uat:
       platformName: "IOS"
       deviceName: "iPhone 16"
       automationName: "XCUITest"
-      appPackage: "com.swaglabsmobileapp"
-      appActivity: "com.swaglabsmobileapp.SplashActivity"
       app: "${user.dir}/src/test/resources/iosApp/ios.app.ipa"
+      bundilId: "com.swaglabsmobileapp"
 
