@@ -1,9 +1,13 @@
-name: iOS Test
+name: iOS Tests
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Enter Cucumber tag(s) to run'
+        required: true
+        default: "@UAT"
+        type: string
 
 jobs:
   test-ios:
