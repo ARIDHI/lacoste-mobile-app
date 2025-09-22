@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Enter Cucumber tag to run'
+        description: 'Enter Cucumber tag(s) to run'
         required: true
         default: "@UAT"
         type: string
 
 jobs:
   build-ios:
-    runs-on: macos-14 
+    runs-on: macos-14   # macOS 14 = Xcode 15.x avec iOS 17.5
     env:
       TAGS: ${{ github.event.inputs.tags }}
 
@@ -30,30 +30,35 @@ jobs:
         with:
           xcode-version: '15.2'
       - run: |
-           xcodebuild -version
-           gem install cocoapods
+          xcodebuild -version
+          gem install cocoapods
 
       - name: Setup Appium
         run: |
           npm install -g appium@next
           appium -v
           appium driver install xcuitest
-          # Timeouts Appium
           echo '{
             "appium:adbExecTimeout": 120000,
             "appium:uiautomator2ServerInstallTimeout": 120000,
             "appium:uiautomator2ServerLaunchTimeout": 120000,
-            "appium:appInstallTimeout": 120000}' > default-capabilities.json
+            "appium:appInstallTimeout": 120000
+          }' > default-capabilities.json
           nohup appium --port 4723 --log-level info --default-capabilities "$(cat default-capabilities.json)" > appium.log 2>&1 &
           sleep 5
           appium driver list --installed
 
-      - name: Run iOS Simulator and Tests
+      - name: Boot iOS Simulator
         run: |
-          xcrun simctl list devices
-          xcrun simctl boot "iPhone 14"
-          xcrun simctl status_bar "iPhone 14" override --batteryState charged --batteryLevel 100
-          echo "Simulator booted!"
+          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (" | grep "iOS 17.5" | head -n 1 | awk -F '[()]' '{print $2}')
+          echo "UDID=$UDID"
+          xcrun simctl boot $UDID
+          xcrun simctl status_bar $UDID override --batteryState charged --batteryLevel 100
+          open -a Simulator --args -CurrentDeviceUDID $UDID
+          sleep 10
+
+      - name: Run iOS Tests
+        run: |
           cat appium.log | tail -n 50
           mvn clean test \
             -Dspring.config.location=src/test/resources/application.yaml \
