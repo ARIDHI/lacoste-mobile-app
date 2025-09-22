@@ -23,7 +23,7 @@ uat:
       platformVersion: "17.5"
       app: "${user.dir}/src/test/resources/iosApp/ios.app.ipa"
       bundilId: "com.swaglabsmobileapp"
-      udid: "default"
+      udid: "${SIM_UDID:}"
 
 
 
