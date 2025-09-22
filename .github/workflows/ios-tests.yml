@@ -71,15 +71,8 @@ jobs:
       - name: Run iOS Tests
         run: |
           cat appium.log | tail -n 50
-          mvn clean test \
-            -Dspring.config.location=src/test/resources/application.yaml \
-            -Dappium.deviceName="iPhone 15 Pro" \
-            -Dappium.udid="$SIM_UDID" \
-            -Dappium.platformVersion="17.5" \
-            -Dappium.app="$APP_PATH" \
-            -Dappium.automationName="XCUITest"
-            -Duat.currentEnv=ios \
-            -Dcucumber.filter.tags="${TAGS}"
+          mvn clean test -Dspring.config.location=src/test/resources/application.yaml -Dappium.deviceName="iPhone 15 Pro" -Dappium.udid="$SIM_UDID" \
+            -Dappium.platformVersion="17.5" -Dappium.app="$APP_PATH" -Dappium.automationName="XCUITest" -Duat.currentEnv=ios -Dcucumber.filter.tags="${TAGS}"
 
       - name: Upload Appium Logs
         if: failure()
