@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-ios:
-    runs-on: macos-14   # macOS 14 = Xcode 15.x avec iOS 17.5
+    runs-on: macos-14 
     env:
       TAGS: ${{ github.event.inputs.tags }}
 
@@ -50,8 +50,19 @@ jobs:
 
       - name: Boot iOS Simulator
         run: |
-          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (" | grep "iOS 17.5" | head -n 1 | awk -F '[()]' '{print $2}')
-          echo "UDID=$UDID"
+          # Cherche un UDID pour iPhone 15 Pro
+          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (" | head -n 1 | awk -F '[()]' '{print $2}')
+          # Fallback si iPhone 15 Pro non dispo
+          if [ -z "$UDID" ]; then
+            echo "iPhone 15 Pro non trouvé, fallback vers iPhone 14..."
+            UDID=$(xcrun simctl list devices available | grep "iPhone 14 (" | head -n 1 | awk -F '[()]' '{print $2}')
+          fi
+          if [ -z "$UDID" ]; then
+            echo "no simulateur iPhone 15 Pro ou iPhone 14 trouvé"
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Selected UDID: $UDID"
           xcrun simctl boot $UDID
           xcrun simctl status_bar $UDID override --batteryState charged --batteryLevel 100
           open -a Simulator --args -CurrentDeviceUDID $UDID
