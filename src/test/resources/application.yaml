@@ -17,9 +17,12 @@ uat:
       appActivity: "com.swaglabsmobileapp.SplashActivity"
       app: "${user.dir}/src/test/resources/androidApp/android.app.apk"
    ios:
-      platformName: "IOS"
-      deviceName: "iPhone 16"
+      platformName: "iOS"
+      deviceName: "iPhone 15 Pro"
       automationName: "XCUITest"
+      platformVersion: "17.5"
       app: "${user.dir}/src/test/resources/iosApp/ios.app.ipa"
       bundilId: "com.swaglabsmobileapp"
+
+
 
