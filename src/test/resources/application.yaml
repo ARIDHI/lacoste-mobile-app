@@ -21,7 +21,7 @@ uat:
       deviceName: "iPhone 15 Pro"
       automationName: "XCUITest"
       platformVersion: "17.5"
-      app: "${user.dir}/src/test/resources/iosApp/ios.app.ipa"
+      app: "${user.dir}/src/test/resources/iosApp/SwagLabsMobileApp.app"
       bundilId: "com.swaglabsmobileapp"
       udid: "${SIM_UDID:}"
 
